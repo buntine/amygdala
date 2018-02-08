@@ -35,6 +35,7 @@ class Stroke {
     ctx.beginPath();
     ctx.moveTo(this.x + this.xOffset, this.y + this.yOffset);
     ctx.lineTo(this.x + nextXOffset, this.y + nextYOffset);
+    ctx.strokeStyle = this.color;
     ctx.stroke();
 
     this.xOffset = nextXOffset;
@@ -67,6 +68,18 @@ class Painter {
     this.loColor = color;
   }
 
+  lerpColor(amount) {
+    let ah = parseInt(this.hiColor.replace(/#/g, ''), 16),
+        ar = ah >> 16, ag = ah >> 8 & 0xff, ab = ah & 0xff,
+        bh = parseInt(this.loColor.replace(/#/g, ''), 16),
+        br = bh >> 16, bg = bh >> 8 & 0xff, bb = bh & 0xff,
+        rr = ar + amount * (br - ar),
+        rg = ag + amount * (bg - ag),
+        rb = ab + amount * (bb - ab);
+
+    return '#' + ((1 << 24) + (rr << 16) + (rg << 8) + rb | 0).toString(16).slice(1);
+  }
+
   createStroke() {
     const height = random(MAX_HEIGHT, MIN_HEIGHT);
     const length = random(MAX_STROKE_WIDTH, MIN_STROKE_WIDTH);
@@ -77,7 +90,7 @@ class Painter {
     for (let i = 0; i < height; i++) {
       const strokeLength = random(length, length - STROKE_VARIANCE);
 
-      this.strokes.push(new Stroke(x + random(STROKE_VARIANCE), y + i, strokeLength, tilt, "lerpColor between hiColor and loColor"));
+      this.strokes.push(new Stroke(x + random(STROKE_VARIANCE), y + i, strokeLength, tilt, this.lerpColor(Math.random())));
     }
   }
 
@@ -95,10 +108,13 @@ class Painter {
   }
 }
 
-const p = new Painter("111111", "ffbb93");
+const painters = [
+  new Painter("#FFB6C1", "#551A8B"),
+  new Painter("#98FB98", "#FFFFE0"),
+];
 
 function main() {
-  p.update();
+  painters.forEach(p => p.update());
   
   requestAnimationFrame(main);
 }

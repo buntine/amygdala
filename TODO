@@ -1,0 +1,6 @@
+- Different angles
+- Go opposite direction
+- Bezier curve
+- After N minutes, fade out canvas
+-- Or clear on given keystroke
+- If no input after N seconds, randomize colors
