@@ -17,9 +17,42 @@ const random = function(max, min = 0) {
   return Math.floor(Math.random() * Math.floor(max - min)) + min;
 }
 
-class Stroke {
+class VerticalStroke {
   constructor(x, y, length, tilt, color) {
     this.x = x;
+    this.y = y + random(STROKE_VARIANCE);
+    this.xOffset = 0;
+    this.yOffset = 0;
+    this.length = length;
+    this.tilt = tilt;
+    this.color = color;
+  }
+
+  update() {
+    const nextYOffset = this.yOffset + random(MAX_SPEED, MIN_SPEED);
+    const nextXOffset = this.xOffset + this.tilt;
+
+    ctx.beginPath();
+    ctx.moveTo(this.x + this.xOffset, this.y + this.yOffset);
+    ctx.lineTo(this.x + nextXOffset, this.y + nextYOffset);
+    ctx.strokeStyle = this.color;
+    ctx.stroke();
+
+    this.xOffset = nextXOffset;
+    this.yOffset = nextYOffset;
+
+    return this.isFinished();
+  }
+
+  isFinished() {
+    return this.yOffset > this.length;
+  }
+}
+
+
+class HorizontalStroke {
+  constructor(x, y, length, tilt, color) {
+    this.x = x + random(STROKE_VARIANCE);
     this.y = y;
     this.xOffset = 0;
     this.yOffset = 0;
@@ -80,17 +113,27 @@ class Painter {
     return '#' + ((1 << 24) + (rr << 16) + (rg << 8) + rb | 0).toString(16).slice(1);
   }
 
-  createStroke() {
+  createStroke(kind, x, y, i, length, tilt) {
+    if (kind === 'vertical') {
+      return new VerticalStroke(x + i, y, length, tilt, this.lerpColor(Math.random()));
+    } else {
+      return new HorizontalStroke(x, y + i, length, tilt, this.lerpColor(Math.random()));
+    }
+  }
+
+  createStrokes() {
     const height = random(MAX_HEIGHT, MIN_HEIGHT);
     const length = random(MAX_STROKE_WIDTH, MIN_STROKE_WIDTH);
     const tilt = Math.random() / 4;
     const x = random(window.innerWidth - length)
     const y = random(window.innerHeight - height)
+    const kind = Math.random() > 0.5 ? 'vertical' : 'horizontal';
 
     for (let i = 0; i < height; i++) {
       const strokeLength = random(length, length - STROKE_VARIANCE);
 
-      this.strokes.push(new Stroke(x + random(STROKE_VARIANCE), y + i, strokeLength, tilt, this.lerpColor(Math.random())));
+      this.strokes.push(
+        this.createStroke(kind, x, y, i, strokeLength, tilt));
     }
   }
 
@@ -100,10 +143,10 @@ class Painter {
 
       if (remaining.every(r => !!r)) {
         this.reset();
-        this.createStroke();
+        this.createStrokes();
       }
     } else {
-      this.createStroke();
+      this.createStrokes();
     }
   }
 }
