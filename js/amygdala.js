@@ -1,27 +1,11 @@
-// Painter class
-//// Has colors (2)
-//// Runs in setInterval
-//// Paints randomly on screen (length, width, speed, etc)
-
-// Main
-//// Set default colors
-//// Setup N painters
-//// Listen for keystroke (u and d)
-////// Update color in each painter
-//
-//// After N minutes, fade out canvas
-//// Or clear on given keystroke
-//
-//// If no input after N seconds, randomize colors
-
 const MAX_WAIT_TIME = 500;
 const MAX_HEIGHT = 300;
 const MIN_HEIGHT = 70;
 const MAX_STROKE_WIDTH = 800;
 const MIN_STROKE_WIDTH = 300;
 const STROKE_VARIANCE = 40;
-const MIN_SPEED = 3;
-const MAX_SPEED = 8;
+const MIN_SPEED = 7;
+const MAX_SPEED = 12;
 
 const canvas = document.getElementById("amygdala");
 const ctx = canvas.getContext("2d");
@@ -34,29 +18,33 @@ const random = function(max, min = 0) {
 }
 
 class Stroke {
-  constructor(x, y, length, color) {
+  constructor(x, y, length, tilt, color) {
     this.x = x;
     this.y = y;
-    this.offset = 0;
+    this.xOffset = 0;
+    this.yOffset = 0;
     this.length = length;
+    this.tilt = tilt;
     this.color = color;
   }
 
   update() {
-    const nextOffset = this.offset + random(MAX_SPEED, MIN_SPEED);
+    const nextXOffset = this.xOffset + random(MAX_SPEED, MIN_SPEED);
+    const nextYOffset = this.yOffset + this.tilt;
 
     ctx.beginPath();
-    ctx.moveTo(this.x + this.offset, this.y);
-    ctx.lineTo(this.x + nextOffset, this.y);
+    ctx.moveTo(this.x + this.xOffset, this.y + this.yOffset);
+    ctx.lineTo(this.x + nextXOffset, this.y + nextYOffset);
     ctx.stroke();
 
-    this.offset = nextOffset;
+    this.xOffset = nextXOffset;
+    this.yOffset = nextYOffset;
 
     return this.isFinished();
   }
 
   isFinished() {
-    return this.offset > this.length;
+    return this.xOffset > this.length;
   }
 }
 
@@ -79,21 +67,17 @@ class Painter {
     this.loColor = color;
   }
 
-  scheduleStroke() {
-    //    setTimeout(() => this.createStroke(), random(MAX_WAIT_TIME));
-    this.createStroke();
-  }
-
   createStroke() {
     const height = random(MAX_HEIGHT, MIN_HEIGHT);
     const length = random(MAX_STROKE_WIDTH, MIN_STROKE_WIDTH);
+    const tilt = Math.random() / 4;
     const x = random(window.innerWidth - length)
     const y = random(window.innerHeight - height)
 
     for (let i = 0; i < height; i++) {
       const strokeLength = random(length, length - STROKE_VARIANCE);
 
-      this.strokes.push(new Stroke(x, y + i, strokeLength, "lerpColor between hiColor and loColor"));
+      this.strokes.push(new Stroke(x + random(STROKE_VARIANCE), y + i, strokeLength, tilt, "lerpColor between hiColor and loColor"));
     }
   }
 
@@ -103,11 +87,10 @@ class Painter {
 
       if (remaining.every(r => !!r)) {
         this.reset();
-        this.scheduleStroke();
+        this.createStroke();
       }
     } else {
-      console.log("stroke");
-      this.scheduleStroke();
+      this.createStroke();
     }
   }
 }
