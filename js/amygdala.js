@@ -3,29 +3,35 @@ const MAX_HEIGHT = 300;
 const MIN_HEIGHT = 70;
 const MAX_STROKE_WIDTH = 800;
 const MIN_STROKE_WIDTH = 300;
-const STROKE_VARIANCE = 40;
+const MAX_STROKE_HEIGHT = 4;
+const STROKE_VARIANCE = 50;
 const MIN_SPEED = 7;
 const MAX_SPEED = 12;
+const HORIZ_PROBABILITY = 0.8;
+const TILT_FACTOR = 3;
+const BLUR_SIZE = 10;
 
 const canvas = document.getElementById("amygdala");
 const ctx = canvas.getContext("2d");
 
 ctx.canvas.width  = window.innerWidth;
 ctx.canvas.height = window.innerHeight;
+ctx.shadowBlur = BLUR_SIZE;
 
 const random = function(max, min = 0) {
   return Math.floor(Math.random() * Math.floor(max - min)) + min;
 }
 
 class VerticalStroke {
-  constructor(x, y, length, tilt, color) {
-    this.x = x;
+  constructor(x, y, offset, length, tilt, color) {
+    this.x = x + offset;
     this.y = y + random(STROKE_VARIANCE);
     this.xOffset = 0;
     this.yOffset = 0;
     this.length = length;
     this.tilt = tilt;
     this.color = color;
+    this.lineWidth = random(MAX_STROKE_HEIGHT, 1);
   }
 
   update() {
@@ -36,6 +42,8 @@ class VerticalStroke {
     ctx.moveTo(this.x + this.xOffset, this.y + this.yOffset);
     ctx.lineTo(this.x + nextXOffset, this.y + nextYOffset);
     ctx.strokeStyle = this.color;
+    ctx.shadowColor = this.color;
+    ctx.lineWidth = this.lineWidth;
     ctx.stroke();
 
     this.xOffset = nextXOffset;
@@ -51,14 +59,15 @@ class VerticalStroke {
 
 
 class HorizontalStroke {
-  constructor(x, y, length, tilt, color) {
+  constructor(x, y, offset, length, tilt, color) {
     this.x = x + random(STROKE_VARIANCE);
-    this.y = y;
+    this.y = y + offset;
     this.xOffset = 0;
     this.yOffset = 0;
     this.length = length;
     this.tilt = tilt;
     this.color = color;
+    this.lineWidth = random(MAX_STROKE_HEIGHT, 1);
   }
 
   update() {
@@ -69,6 +78,8 @@ class HorizontalStroke {
     ctx.moveTo(this.x + this.xOffset, this.y + this.yOffset);
     ctx.lineTo(this.x + nextXOffset, this.y + nextYOffset);
     ctx.strokeStyle = this.color;
+    ctx.shadowColor = this.color;
+    ctx.lineWidth = this.lineWidth;
     ctx.stroke();
 
     this.xOffset = nextXOffset;
@@ -113,27 +124,19 @@ class Painter {
     return '#' + ((1 << 24) + (rr << 16) + (rg << 8) + rb | 0).toString(16).slice(1);
   }
 
-  createStroke(kind, x, y, i, length, tilt) {
-    if (kind === 'vertical') {
-      return new VerticalStroke(x + i, y, length, tilt, this.lerpColor(Math.random()));
-    } else {
-      return new HorizontalStroke(x, y + i, length, tilt, this.lerpColor(Math.random()));
-    }
-  }
-
   createStrokes() {
     const height = random(MAX_HEIGHT, MIN_HEIGHT);
     const length = random(MAX_STROKE_WIDTH, MIN_STROKE_WIDTH);
-    const tilt = Math.random() / 4;
-    const x = random(window.innerWidth - length)
-    const y = random(window.innerHeight - height)
-    const kind = Math.random() > 0.5 ? 'vertical' : 'horizontal';
+    const tilt = random(TILT_FACTOR, -TILT_FACTOR);
+    const x = random(window.innerWidth - length);
+    const y = random(window.innerHeight - height);
+    const kind = Math.random() > HORIZ_PROBABILITY ? VerticalStroke : HorizontalStroke;
 
     for (let i = 0; i < height; i++) {
       const strokeLength = random(length, length - STROKE_VARIANCE);
 
       this.strokes.push(
-        this.createStroke(kind, x, y, i, strokeLength, tilt));
+        new kind(x, y, i, strokeLength, tilt, this.lerpColor(Math.random())));
     }
   }
 
@@ -158,7 +161,7 @@ const painters = [
 
 function main() {
   painters.forEach(p => p.update());
-  
+
   requestAnimationFrame(main);
 }
 
