@@ -1,0 +1,51 @@
+const x1 = 100,
+      y1 = 100,
+      bx1 = 100,
+      by1 = 100,
+      bx2 = 300,
+      by2 = 150,
+      x2 = 500,
+      y2 = 100,
+      speed = 0.017;
+
+let progress = 0;
+
+function main() {
+  const t0 = progress;
+  const t1 = progress + speed;
+
+  u0 = 1.0 - t0
+  u1 = 1.0 - t1
+
+  qxa =  x1*u0*u0 + bx1*2*t0*u0 + bx2*t0*t0
+  qxb =  x1*u1*u1 + bx1*2*t1*u1 + bx2*t1*t1
+  qxc = bx1*u0*u0 + bx2*2*t0*u0 +  x2*t0*t0
+  qxd = bx1*u1*u1 + bx2*2*t1*u1 +  x2*t1*t1
+
+  qya =  y1*u0*u0 + by1*2*t0*u0 + by2*t0*t0
+  qyb =  y1*u1*u1 + by1*2*t1*u1 + by2*t1*t1
+  qyc = by1*u0*u0 + by2*2*t0*u0 +  y2*t0*t0
+  qyd = by1*u1*u1 + by2*2*t1*u1 +  y2*t1*t1
+
+  xa = qxa*u0 + qxc*t0
+  xb = qxa*u1 + qxc*t1
+  xc = qxb*u0 + qxd*t0
+  xd = qxb*u1 + qxd*t1
+
+  ya = qya*u0 + qyc*t0
+  yb = qya*u1 + qyc*t1
+  yc = qyb*u0 + qyd*t0
+  yd = qyb*u1 + qyd*t1
+   
+  ctx.beginPath();
+  ctx.moveTo(xa, ya);
+  ctx.bezierCurveTo(xb, yb, xc, yc, xd, yd);
+  ctx.stroke();
+   
+  if (progress < 1) {
+    progress += speed;
+    requestAnimationFrame(main);
+  }
+}
+
+main();
