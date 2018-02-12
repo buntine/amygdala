@@ -113,15 +113,13 @@ class Painter {
   }
 
   lerpColor(amount) {
-    let ah = parseInt(this.hiColor.replace(/#/g, ''), 16),
-        ar = ah >> 16, ag = ah >> 8 & 0xff, ab = ah & 0xff,
-        bh = parseInt(this.loColor.replace(/#/g, ''), 16),
-        br = bh >> 16, bg = bh >> 8 & 0xff, bb = bh & 0xff,
-        rr = ar + amount * (br - ar),
-        rg = ag + amount * (bg - ag),
-        rb = ab + amount * (bb - ab);
+    const hi = this.hiColor;
+    const lo = this.loColor;
+    const rr = hi.r + amount * (lo.r - hi.r);
+    const rg = hi.g + amount * (lo.g - hi.g);
+    const rb = hi.b + amount * (lo.b - hi.b);
 
-    return '#' + ((1 << 24) + (rr << 16) + (rg << 8) + rb | 0).toString(16).slice(1);
+    return `rgb(${rr.toFixed()}, ${rg.toFixed()}, ${rb.toFixed()})`;
   }
 
   createStrokes() {
@@ -154,9 +152,37 @@ class Painter {
   }
 }
 
+class Color {
+  constructor(r, g, b) {
+    this.r = r[0];
+    this.g = g[0];
+    this.b = b[0];
+
+    window.addEventListener("keydown", e => {
+      switch (e.key) {
+        case r[1]:
+          this.r = this.r + 1;
+          break;
+        case g[1]:
+          this.g = this.g + 1;
+          break;
+        case b[1]:
+          this.b = this.b + 1;
+        default:
+      }
+    });
+  }
+}
+
 const painters = [
-  new Painter("#FFB6C1", "#551A8B"),
-  new Painter("#98FB98", "#FFFFE0"),
+  new Painter(
+    new Color([255, 'a'], [67, 'b'], [102, 'c']),
+    new Color([205, 'd'], [17, 'e'], [52, 'f']),
+  ),
+  new Painter(
+    new Color([255, 'g'], [67, 'h'], [102, 'i']),
+    new Color([205, 'j'], [17, 'k'], [52, 'l']),
+  ),
 ];
 
 function main() {

@@ -1,5 +1,5 @@
-- Different angles
-- Go opposite direction
+- Set colors on key strokes
+- Set points on canvas that animate on keystroke
 - Bezier curve
 - After N minutes, fade out canvas
 -- Or clear on given keystroke
