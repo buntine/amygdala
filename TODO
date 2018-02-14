@@ -1,4 +1,8 @@
+- Refactor
+-- Move to separate files
 - Set points on canvas that animate on keystroke
-- Bezier curve
-- After N minutes, fade out canvas
-- If no input after N seconds, randomize colors
+- Add a README
+
+Maybe:
+  - Bezier curve
+  - After N minutes, fade out canvas

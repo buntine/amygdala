@@ -12,7 +12,7 @@ const TILT_FACTOR = 3;
 const BLUR_SIZE = 10;
 const NO_INPUT_WAIT_TIME = 60000;
 
-const canvas = document.getElementById("amygdala");
+const canvas = <HTMLCanvasElement>document.getElementById("amygdala");
 const ctx = canvas.getContext("2d");
 
 ctx.canvas.width  = window.innerWidth;
@@ -23,8 +23,37 @@ const random = function(max, min = 0) {
   return Math.floor(Math.random() * Math.floor(max - min)) + min;
 }
 
+interface Stroke {
+  x : number;
+  y : number;
+  xOffset : number;
+  yOffset : number;
+  length : number;
+  tilt : number;
+  color : string;
+  lineWidth : number;
+
+  update() : void;
+  isFinished() : boolean;
+}
+
+interface RGB {
+  r : number;
+  g : number;
+  b : number;
+}
+
 class VerticalStroke {
-  constructor(x, y, offset, length, tilt, color) {
+  x : number;
+  y : number;
+  xOffset : number;
+  yOffset : number;
+  length : number;
+  tilt : number;
+  color : string;
+  lineWidth : number;
+
+  constructor(x : number, y : number, offset : number, length : number, tilt : number, color : string) {
     this.x = x + offset;
     this.y = y + random(STROKE_VARIANCE);
     this.xOffset = 0;
@@ -60,7 +89,16 @@ class VerticalStroke {
 
 
 class HorizontalStroke {
-  constructor(x, y, offset, length, tilt, color) {
+  x : number;
+  y : number;
+  xOffset : number;
+  yOffset : number;
+  length : number;
+  tilt : number;
+  color : string;
+  lineWidth : number;
+
+  constructor(x : number, y : number, offset : number, length : number, tilt : number, color : string) {
     this.x = x + random(STROKE_VARIANCE);
     this.y = y + offset;
     this.xOffset = 0;
@@ -95,7 +133,10 @@ class HorizontalStroke {
 }
 
 class Painter {
-  constructor(nextColorKey, prevColorKey) {
+  color : Color;
+  strokes : Stroke[];
+
+  constructor(nextColorKey : string, prevColorKey : string) {
     this.color = new Color(nextColorKey, prevColorKey);
     this.strokes = [];
   }
@@ -140,7 +181,12 @@ const COLORS = [
 ];
 
 class Color {
-  constructor(nextColorKey, prevColorKey) {
+  high : RGB;
+  low : RGB;
+  i : number;
+  pendingChange : number;
+
+  constructor(nextColorKey : string, prevColorKey : string) {
     this.high = {r: 200, g: 89, b: 126};
     this.low = {r: 140, g: 59, b: 88};
     this.i = 0;
