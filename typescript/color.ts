@@ -27,7 +27,7 @@ export default class Color {
     });
   }
 
-  lerpColor(amount) {
+  lerpColor(amount: number) : string {
     const color = c.COLORS[this.i];
     const hi = color[0];
     const lo = color[1];
