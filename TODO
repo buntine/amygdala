@@ -1,5 +1,5 @@
-- Refactor
--- Move to separate files
+- Browserify / WebPack so I can run in browser
+- Add in all gradients
 - Set points on canvas that animate on keystroke
 - Add a README
 
