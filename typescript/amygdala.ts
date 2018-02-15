@@ -10,8 +10,8 @@ ctx.shadowBlur = c.BLUR_SIZE;
 
 const painters = [
   new Painter(ctx, 'a', 'b'),
-  new Painter(ctx, 'c', 'd'),
-  new Painter(ctx, 'e', 'f'),
+    new Painter(ctx, 'c', 'd'),
+    new Painter(ctx, 'e', 'f'),
 ];
 
 function main() {

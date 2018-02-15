@@ -25,7 +25,9 @@ export default class HorizontalStroke {
   }
 
   update() {
-    const nextXOffset = this.xOffset + h.random(c.MAX_SPEED, c.MIN_SPEED);
+    const remaining = Math.min(0.8, 1 - (this.xOffset / this.length));
+    const movement = Math.max((remaining * (2 - remaining)), 0.25) * h.random(c.MAX_SPEED, c.MIN_SPEED);
+    const nextXOffset = this.xOffset + movement;
     const nextYOffset = this.yOffset + this.tilt;
     const ctx = this.ctx;
 
