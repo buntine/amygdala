@@ -1,1 +1,2 @@
+browserify typescript/amygdala.ts -p [ tsify --noImplicitAny --removeComments ] > js/amygdala.js &&\
 python2.7 -m SimpleHTTPServer 2999

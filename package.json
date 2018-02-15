@@ -1,0 +1,27 @@
+{
+  "name": "amygdala",
+  "version": "0.1.1",
+  "description": "A White Night installation with Melanie Huang",
+  "author": "Andrew Buntine <info@bunts.io>",
+  "contributors": [
+    {
+      "name": "Melanie Huang",
+      "email": "hello@melaniehuang.com"
+    }
+  ],
+  "scripts": {
+    "run": "./run"
+  },
+  "main": "typescript/amygdala.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/buntine/amygdala"
+  },
+  "dependencies": {
+    "browserify": "^16.1.0",
+    "tsify": "^3.0.4",
+    "typescript": "^2.7.1"
+  },
+  "devDependencies": {},
+  "license": "MIT"
+}
