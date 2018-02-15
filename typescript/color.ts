@@ -1,3 +1,4 @@
+import * as h from "./helpers";
 import * as c from "./constants";
 
 interface RGB {
@@ -7,16 +8,14 @@ interface RGB {
 }
 
 export default class Color {
-  high : RGB;
-  low : RGB;
   i : number;
+  preview : HTMLElement;
   pendingChange : number;
 
-  constructor(nextColorKey : string, prevColorKey : string) {
-    this.high = {r: 200, g: 89, b: 126};
-    this.low = {r: 140, g: 59, b: 88};
-    this.i = 0;
-    this.scheduleChange();
+  constructor(nextColorKey : string, prevColorKey : string, div : string) {
+    this.i = h.random(c.COLORS.length - 1);
+    this.preview = document.getElementById(div);
+    this.nextColor();
 
     window.addEventListener("keydown", (e) => {
       if (e.key === nextColorKey) {
@@ -40,13 +39,20 @@ export default class Color {
 
   nextColor() {
     this.i = (this.i + 1) % c.COLORS.length;
+    this.updatePreview();
     this.scheduleChange();
   }
 
   prevColor() {
     const nextI = this.i - 1;
     this.i = nextI < 0 ? c.COLORS.length - 1 : nextI;
+    this.updatePreview();
     this.scheduleChange();
+  }
+
+  updatePreview() {
+    const color = c.COLORS[this.i];
+    this.preview.style.background = `linear-gradient(to right, rgb(${color[0].join(",")}), rgb(${color[1].join(",")}))`;
   }
 
   scheduleChange() {

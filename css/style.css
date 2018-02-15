@@ -4,3 +4,13 @@ html, body {
   margin: 0px;
   overflow: hidden;
 }
+
+#painter1 {
+  width: 200px;
+  height: 200px;
+  position: absolute;
+  border-radius: 50%;
+  top: 20px;
+  left: 20px;
+  z-index: 100;
+}

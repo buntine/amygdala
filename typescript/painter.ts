@@ -25,7 +25,7 @@ export default class Painter {
 
   constructor(ctx : CanvasRenderingContext2D, nextColorKey : string, prevColorKey : string) {
     this.ctx = ctx;
-    this.color = new Color(nextColorKey, prevColorKey);
+    this.color = new Color(nextColorKey, prevColorKey, "painter1");
     this.strokes = [];
   }
 
