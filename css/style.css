@@ -5,12 +5,25 @@ html, body {
   overflow: hidden;
 }
 
-#painter1 {
+div.painter {
   width: 200px;
   height: 200px;
   position: absolute;
   border-radius: 50%;
+  z-index: 100;
+}
+
+#painter1 {
   top: 20px;
   left: 20px;
-  z-index: 100;
+}
+
+#painter2 {
+  top: 20px;
+  left: 240px;
+}
+
+#painter3 {
+  top: 20px;
+  left: 460px;
 }

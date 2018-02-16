@@ -23,9 +23,9 @@ export default class Painter {
   color : Color;
   strokes : Stroke[];
 
-  constructor(ctx : CanvasRenderingContext2D, nextColorKey : string, prevColorKey : string) {
+  constructor(ctx : CanvasRenderingContext2D, preview : string, nextColorKey : string, prevColorKey : string) {
     this.ctx = ctx;
-    this.color = new Color(nextColorKey, prevColorKey, "painter1");
+    this.color = new Color(nextColorKey, prevColorKey, preview);
     this.strokes = [];
   }
 
@@ -37,8 +37,8 @@ export default class Painter {
     const height = h.random(c.MAX_HEIGHT, c.MIN_HEIGHT);
     const length = h.random(c.MAX_STROKE_WIDTH, c.MIN_STROKE_WIDTH);
     const tilt = h.random(c.TILT_FACTOR, -c.TILT_FACTOR);
-    const x = h.random(window.innerWidth - length);
-    const y = h.random(window.innerHeight - height);
+    const x = h.random(window.innerWidth - length, c.OFFSCREEN_ALLOWANCE);
+    const y = h.random(window.innerHeight - height, c.OFFSCREEN_ALLOWANCE);
     const kind = Math.random() > c.HORIZ_PROBABILITY ? VerticalStroke : HorizontalStroke;
 
     for (let i = 0; i < height; i++) {

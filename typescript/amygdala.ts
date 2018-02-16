@@ -9,9 +9,9 @@ ctx.canvas.height = window.innerHeight;
 ctx.shadowBlur = c.BLUR_SIZE;
 
 const painters = [
-  new Painter(ctx, 'a', 'b'),
-  new Painter(ctx, 'c', 'd'),
-  new Painter(ctx, 'e', 'f'),
+  new Painter(ctx, "painter1", "a", "b"),
+  new Painter(ctx, "painter2", "c", "d"),
+  new Painter(ctx, "painter3", "e", "f"),
 ];
 
 function main() {

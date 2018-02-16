@@ -11,6 +11,7 @@ export const HORIZ_PROBABILITY = 0.8;
 export const TILT_FACTOR = 3;
 export const BLUR_SIZE = 10;
 export const NO_INPUT_WAIT_TIME = 60000;
+export const OFFSCREEN_ALLOWANCE = -60;
 export const COLORS = [
   [[218, 68, 83], [137,33,107]],
   [[225, 238, 195], [240,80,83]],

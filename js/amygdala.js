@@ -9,9 +9,9 @@ ctx.canvas.width = window.innerWidth;
 ctx.canvas.height = window.innerHeight;
 ctx.shadowBlur = c.BLUR_SIZE;
 var painters = [
-    new painter_1["default"](ctx, 'a', 'b'),
-    new painter_1["default"](ctx, 'c', 'd'),
-    new painter_1["default"](ctx, 'e', 'f'),
+    new painter_1["default"](ctx, "painter1", "a", "b"),
+    new painter_1["default"](ctx, "painter2", "c", "d"),
+    new painter_1["default"](ctx, "painter3", "e", "f"),
 ];
 function main() {
     painters.forEach(function (p) { return p.update(); });
@@ -90,6 +90,7 @@ exports.HORIZ_PROBABILITY = 0.8;
 exports.TILT_FACTOR = 3;
 exports.BLUR_SIZE = 10;
 exports.NO_INPUT_WAIT_TIME = 60000;
+exports.OFFSCREEN_ALLOWANCE = -60;
 exports.COLORS = [
     [[218, 68, 83], [137, 33, 107]],
     [[225, 238, 195], [240, 80, 83]],
@@ -216,9 +217,9 @@ var color_1 = require("./color");
 var vertical_stroke_1 = require("./vertical_stroke");
 var horizontal_stroke_1 = require("./horizontal_stroke");
 var Painter = (function () {
-    function Painter(ctx, nextColorKey, prevColorKey) {
+    function Painter(ctx, preview, nextColorKey, prevColorKey) {
         this.ctx = ctx;
-        this.color = new color_1["default"](nextColorKey, prevColorKey, "painter1");
+        this.color = new color_1["default"](nextColorKey, prevColorKey, preview);
         this.strokes = [];
     }
     Painter.prototype.reset = function () {
@@ -228,8 +229,8 @@ var Painter = (function () {
         var height = h.random(c.MAX_HEIGHT, c.MIN_HEIGHT);
         var length = h.random(c.MAX_STROKE_WIDTH, c.MIN_STROKE_WIDTH);
         var tilt = h.random(c.TILT_FACTOR, -c.TILT_FACTOR);
-        var x = h.random(window.innerWidth - length);
-        var y = h.random(window.innerHeight - height);
+        var x = h.random(window.innerWidth - length, c.OFFSCREEN_ALLOWANCE);
+        var y = h.random(window.innerHeight - height, c.OFFSCREEN_ALLOWANCE);
         var kind = Math.random() > c.HORIZ_PROBABILITY ? vertical_stroke_1["default"] : horizontal_stroke_1["default"];
         for (var i = 0; i < height; i++) {
             var strokeLength = h.random(length, length - c.STROKE_VARIANCE);
