@@ -1,6 +1,4 @@
-- Draw current gradients in top of page
-- Update gradients on top of page on keystroke
-- Start painter at random gradient
+- Position gradients appropriate for sensors
 - Add a README
 
 Maybe:
