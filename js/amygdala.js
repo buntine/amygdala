@@ -91,7 +91,7 @@ exports.TILT_FACTOR = 3;
 exports.BLUR_SIZE = 10;
 exports.NO_INPUT_WAIT_TIME = 60000;
 exports.OFFSCREEN_ALLOWANCE = -60;
-exports.MAX_CURVE = 0.25;
+exports.MAX_CURVE = 0.4;
 exports.MIN_CURVE = 0.8;
 exports.COLORS = [
     [[218, 68, 83], [137, 33, 107]],
