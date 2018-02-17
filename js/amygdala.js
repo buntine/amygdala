@@ -86,11 +86,13 @@ exports.MAX_STROKE_HEIGHT = 4;
 exports.STROKE_VARIANCE = 50;
 exports.MIN_SPEED = 7;
 exports.MAX_SPEED = 12;
-exports.HORIZ_PROBABILITY = 0.8;
+exports.HORIZ_PROBABILITY = 0.7;
 exports.TILT_FACTOR = 3;
 exports.BLUR_SIZE = 10;
 exports.NO_INPUT_WAIT_TIME = 60000;
 exports.OFFSCREEN_ALLOWANCE = -60;
+exports.MAX_CURVE = 0.25;
+exports.MIN_CURVE = 0.8;
 exports.COLORS = [
     [[218, 68, 83], [137, 33, 107]],
     [[225, 238, 195], [240, 80, 83]],
@@ -185,8 +187,8 @@ var HorizontalStroke = (function () {
         this.lineWidth = h.random(c.MAX_STROKE_HEIGHT, 1);
     }
     HorizontalStroke.prototype.update = function () {
-        var remaining = Math.min(0.8, 1 - (this.xOffset / this.length));
-        var movement = Math.max((remaining * (2 - remaining)), 0.25) * h.random(c.MAX_SPEED, c.MIN_SPEED);
+        var remaining = Math.min(c.MIN_CURVE, 1 - (this.xOffset / this.length));
+        var movement = Math.max((remaining * (2 - remaining)), c.MAX_CURVE) * h.random(c.MAX_SPEED, c.MIN_SPEED);
         var nextXOffset = this.xOffset + movement;
         var nextYOffset = this.yOffset + this.tilt;
         var ctx = this.ctx;
@@ -271,7 +273,9 @@ var VerticalStroke = (function () {
         this.lineWidth = h.random(c.MAX_STROKE_HEIGHT, 1);
     }
     VerticalStroke.prototype.update = function () {
-        var nextYOffset = this.yOffset + h.random(c.MAX_SPEED, c.MIN_SPEED);
+        var remaining = Math.min(c.MIN_CURVE, 1 - (this.yOffset / this.length));
+        var movement = Math.max((remaining * (2 - remaining)), c.MAX_CURVE) * h.random(c.MAX_SPEED, c.MIN_SPEED);
+        var nextYOffset = this.yOffset + movement;
         var nextXOffset = this.xOffset + this.tilt;
         var ctx = this.ctx;
         ctx.beginPath();

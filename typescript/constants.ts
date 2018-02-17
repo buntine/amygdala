@@ -7,11 +7,13 @@ export const MAX_STROKE_HEIGHT = 4;
 export const STROKE_VARIANCE = 50;
 export const MIN_SPEED = 7;
 export const MAX_SPEED = 12;
-export const HORIZ_PROBABILITY = 0.8;
+export const HORIZ_PROBABILITY = 0.7;
 export const TILT_FACTOR = 3;
 export const BLUR_SIZE = 10;
 export const NO_INPUT_WAIT_TIME = 60000;
 export const OFFSCREEN_ALLOWANCE = -60;
+export const MAX_CURVE = 0.25;
+export const MIN_CURVE = 0.8;
 export const COLORS = [
   [[218, 68, 83], [137,33,107]],
   [[225, 238, 195], [240,80,83]],

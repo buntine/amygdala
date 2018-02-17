@@ -25,7 +25,9 @@ export default class VerticalStroke {
   }
 
   update() {
-    const nextYOffset = this.yOffset + h.random(c.MAX_SPEED, c.MIN_SPEED);
+    const remaining = Math.min(c.MIN_CURVE, 1 - (this.yOffset / this.length));
+    const movement = Math.max((remaining * (2 - remaining)), c.MAX_CURVE) * h.random(c.MAX_SPEED, c.MIN_SPEED);
+    const nextYOffset = this.yOffset + movement;
     const nextXOffset = this.xOffset + this.tilt;
     const ctx = this.ctx;
 
