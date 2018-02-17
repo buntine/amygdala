@@ -20,4 +20,20 @@ function main() {
   requestAnimationFrame(main);
 }
 
+setInterval(() => {
+  const filename = `amygdala-${(new Date).valueOf()}.png`;
+
+  try {
+    const body = canvas.toDataURL("image/png");
+    const xhttp = new XMLHttpRequest();
+
+    xhttp.open("POST", `http://localhost:4567/${filename}`, true);
+    xhttp.setRequestHeader("Content-type", "image/png");
+    xhttp.send(body);
+  }
+  catch {
+    console.log(`Could not save: ${filename}`);
+  }
+}, c.SCREENSHOT_INTERVAL);
+
 main();

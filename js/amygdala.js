@@ -17,6 +17,19 @@ function main() {
     painters.forEach(function (p) { return p.update(); });
     requestAnimationFrame(main);
 }
+setInterval(function () {
+    var filename = "amygdala-" + (new Date).valueOf() + ".png";
+    try {
+        var body = canvas.toDataURL("image/png");
+        var xhttp = new XMLHttpRequest();
+        xhttp.open("POST", "http://localhost:4567/" + filename, true);
+        xhttp.setRequestHeader("Content-type", "image/png");
+        xhttp.send(body);
+    }
+    catch (_a) {
+        console.log("Could not save: " + filename);
+    }
+}, c.SCREENSHOT_INTERVAL);
 main();
 
 },{"./constants":3,"./painter":6}],2:[function(require,module,exports){
@@ -77,6 +90,7 @@ exports["default"] = Color;
 },{"./constants":3,"./helpers":4}],3:[function(require,module,exports){
 "use strict";
 exports.__esModule = true;
+exports.SCREENSHOT_INTERVAL = 120000;
 exports.MAX_WAIT_TIME = 500;
 exports.MAX_HEIGHT = 300;
 exports.MIN_HEIGHT = 70;

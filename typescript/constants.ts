@@ -1,3 +1,4 @@
+export const SCREENSHOT_INTERVAL = 120000
 export const MAX_WAIT_TIME = 500;
 export const MAX_HEIGHT = 300;
 export const MIN_HEIGHT = 70;
